@@ -1,0 +1,27 @@
+[
+  {
+    "model": "levelupapi.game",
+    "pk": 1,
+    "fields": {
+      "game_type": 1,
+      "title": "Candyland",
+      "maker": 1,
+      "gamer": 1,
+      "number_of_players": 4,
+      "skill_level": 100
+    }
+  },
+
+  {
+    "model": "levelupapi.game",
+    "pk": 2,
+    "fields": {
+      "game_type": 2,
+      "title": "Murder Mystery",
+      "maker": 1,
+      "gamer": 1,
+      "number_of_players": 12,
+      "skill_level": 95
+    }
+  }
+]

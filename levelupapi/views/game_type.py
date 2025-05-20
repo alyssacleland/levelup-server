@@ -16,10 +16,14 @@ class GameTypeView(ViewSet):
             Response -- JSON serialized game type
         """
 
-        game_type = GameType.objects.get(pk=pk)
-        # game_type object -> JSON friendly dictionary:
-        serializer = GameTypeSerializer(game_type)
-        return Response(serializer.data)
+        try:
+            game_type = GameType.objects.get(pk=pk)
+            # game_type object -> JSON friendly dictionary:
+            serializer = GameTypeSerializer(game_type)
+            return Response(serializer.data)
+        except GameType.DoesNotExist as ex:  # catching exception and storing in variable 'ex'
+            # ex.args[0] accesses the first arg pased to the exception, which is the error message defaulted by Django when something is not found
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
 
     def list(self, request):
         """Handle GET requests to get all game types

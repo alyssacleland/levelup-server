@@ -33,7 +33,8 @@ class GameTypeView(ViewSet):
         """
         game_types = GameType.objects.all()
         serializer = GameTypeSerializer(game_types, many=True)
-        return Response(serializer.data)
+        # manually set status code to 201 bc the default fo Response is 200
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class GameTypeSerializer(serializers.ModelSerializer):

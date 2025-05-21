@@ -57,6 +57,19 @@ class EventView(ViewSet):
         serializer = EventSerializer(event)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    def delete(self, request, pk):
+        """Handle DELETE requests for an event
+
+        Returns:
+            Response -- 204 No Content
+        """
+        try:
+            event = Event.objects.get(pk=pk)
+            event.delete()
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
+        except Event.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+
 
 class EventSerializer(serializers.ModelSerializer):
     """JSON serializer for events

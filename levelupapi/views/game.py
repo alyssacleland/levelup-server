@@ -3,7 +3,7 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from levelupapi.models import Game
+from levelupapi.models import Game, GameType, Gamer
 
 
 class GameView(ViewSet):
@@ -36,6 +36,32 @@ class GameView(ViewSet):
             games = games.filter(game_type_id=game_type)
 
         serializer = GameSerializer(games, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        """Handle POST operations
+
+        Returns
+            Response -- JSON serialized game instance
+        """
+        # retrieve gamer object from the database. To make sure the user we're trying to add and the new game actually exist in the database.this is being sourced from UserId in the body of the request.
+        gamer = Gamer.objects.get(uid=request.data["userId"])
+        # retrieve game type object from the database. this is being sourced from the body of the request. this way passes an actual model instance of GameType. it would be relational either way though bc the game_type field in the Game model is a foreign key to the GameType model.
+        game_type = GameType.objects.get(pk=request.data["gameType"])
+
+        # using ORM create method
+        game = Game.objects.create(
+            title=request.data["title"],
+            maker=request.data["maker"],
+            number_of_players=request.data["numberOfPlayers"],
+            skill_level=request.data["skillLevel"],
+            game_type=game_type,
+            gamer=gamer,
+        )
+        # after above, game variavle is now the new game instance, including id.
+
+        # serialize obj and return to client
+        serializer = GameSerializer(game)
         return Response(serializer.data)
 
 

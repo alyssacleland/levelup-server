@@ -44,8 +44,11 @@ class EventView(ViewSet):
         Returns:
             Response -- JSON serialized event instance
         """
+
+        # retrieve game object by primary key from the request data. get the game obj where the pk matches 'game' in the request data (in client side).
+        # retrieve organizer gamer object by uid from the request data. get the gamer obj where the uid's value matches 'organizer''s value in the request data (in client side)
         game = Game.objects.get(pk=request.data["game"])
-        organizer = Gamer.objects.get(pk=request.data["organizer"])
+        organizer = Gamer.objects.get(uid=request.data["organizer"])
 
         event = Event.objects.create(
             game=game,
@@ -86,7 +89,6 @@ class EventView(ViewSet):
         event.save()
 
         return Response(None, status=status.HTTP_204_NO_CONTENT)
-
 
 
 class EventSerializer(serializers.ModelSerializer):

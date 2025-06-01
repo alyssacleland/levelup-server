@@ -69,7 +69,6 @@ class GameView(ViewSet):
         game.delete()
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
-
     def update(self, request, pk):
         """Handle PUT requests for a game
 
